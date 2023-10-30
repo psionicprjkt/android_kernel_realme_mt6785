@@ -36,8 +36,7 @@ wget https://psionicprjkt.my.id/assets/files/AK3-RM6785.zip && unzip AK3-RM6785
 cp out/arch/arm64/boot/Image.gz-dtb AnyKernel && cd AnyKernel
 date=$(date "+%d%m%Y")
 zip -r9 psionicKSU-RM6785-$date-TEST.zip *
-wget https://raw.githubusercontent.com/Sushrut1101/GoFile-Upload/master/upload.sh
-. upload.sh psionicKSU-RM6785-$date-TEST.zip
+curl bashupload.com -T psionicKSU-RM6785-$date-TEST.zip
 }
 
 psionic_compile
