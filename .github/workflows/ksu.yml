@@ -45,6 +45,6 @@ jobs:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         automatic_release_tag: "latest"
         prerelease: false
-        title: psionicKSU-RM6785-${{ env.RELEASE_DATE }}-KernelSU
+        title: psionic-kernel-RM6785-${{ env.RELEASE_DATE }}-KernelSU
         files: |
-          mt6785/AnyKernel/psionicKSU-RM6785*
+          mt6785/AnyKernel/psionic-kernel-RM6785*
