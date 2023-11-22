@@ -27,7 +27,7 @@ rm -rf AK3* && rm -rf AnyKernel
 wget https://psionicprjkt.my.id/assets/files/AK3-RM6785.zip && unzip AK3-RM6785
 cp out/arch/arm64/boot/Image.gz-dtb AnyKernel && cd AnyKernel
 date=$(date "+%d%m%Y")
-zip -r9 psionicKSU-RM6785-$date-TEST.zip *
+zip -r9 psionic-kernel-RM6785-$date-release.zip *
 }
 
 psionic_compile
