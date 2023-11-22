@@ -28,7 +28,7 @@ jobs:
     - name: Build Kernel
       run: |
           cd mt6785
-          . build.sh
+          . build-ksu.sh
 
     - name: Set Date
       run: |
