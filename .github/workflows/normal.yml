@@ -17,6 +17,11 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - run: |
+          git config --global user.name "officialputuid"
+          git config --global user.email officialputuid@hack.id
+
+    - name: Clone sources
+      run: |
           git clone https://github.com/psionicprjkt/android_kernel_realme_mt6785 mt6785
           git clone --depth=1 https://gitlab.com/Panchajanya1999/azure-clang.git mt6785/clang
 
