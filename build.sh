@@ -2,18 +2,10 @@
 
 function psionic_compile()
 {
-
 source ~/.bashrc && source ~/.profile
-export LC_ALL=C && export USE_CCACHE=1
-ccache -M 100G
 export ARCH=arm64
-
-git clone --depth=1 https://gitlab.com/Panchajanya1999/azure-clang.git clang
-
 [ -d "out" ] && rm -rf AnyKernel && rm -rf out || mkdir -p out
-
 make O=out ARCH=arm64 RM6785_defconfig
-
 PATH="${PWD}/clang/bin:${PATH}:${PWD}/clang/bin:${PATH}:${PWD}/clang/bin:${PATH}" \
 make -j$(nproc --all) O=out \
                       ARCH=arm64 \
@@ -29,15 +21,14 @@ make -j$(nproc --all) O=out \
                       CONFIG_NO_ERROR_ON_MISMATCH=y 2>&1 | tee error.log
 }
 
-function psionic_upload()
+function psionic_zip()
 {
 rm -rf AK3* && rm -rf AnyKernel
 wget https://psionicprjkt.my.id/assets/files/AK3-RM6785.zip && unzip AK3-RM6785
 cp out/arch/arm64/boot/Image.gz-dtb AnyKernel && cd AnyKernel
 date=$(date "+%d%m%Y")
 zip -r9 psionicKSU-RM6785-$date-TEST.zip *
-curl bashupload.com -T psionicKSU-RM6785-$date-TEST.zip
 }
 
 psionic_compile
-psionic_upload
+psionic_zip
