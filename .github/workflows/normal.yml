@@ -33,6 +33,11 @@ jobs:
           cd mt6785
           . build-normal.sh
 
+    - name: Trigger ksu wf
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: gh workflow run ksu.yml --ref R-based
+
     - name: Set Date
       run: |
           echo "RELEASE_DATE=$(date +"%d%m%Y")" >> "$GITHUB_ENV"
