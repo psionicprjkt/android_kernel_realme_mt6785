@@ -1,0 +1,41 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: psionic-Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  cron:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./
+
+    steps:
+    - uses: actions/checkout@v2
+    - run: |
+          git clone --depth=1 https://github.com/psionicprjkt/android_kernel_realme_mt6785 mt6785
+          git clone --depth=1 https://gitlab.com/Panchajanya1999/azure-clang.git mt6785/clang
+
+    - name: Latest KernelSU
+      run: |
+          cd mt6785
+          rm -rf KernelSU && curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
+
+    - name: Build Kernel
+      run: |
+          cd mt6785
+          . build.sh
+
+    - name: Release Kernel
+      uses: marvinpinto/action-automatic-releases@latest
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        automatic_release_tag: "latest"
+        prerelease: false
+        title: psionicKSU-RM6785
+        files: |
+          mt6785/AnyKernel/psionicKSU-RM6785*
