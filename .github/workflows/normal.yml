@@ -23,7 +23,7 @@ jobs:
     - name: Clone sources
       run: |
           git clone https://github.com/psionicprjkt/android_kernel_realme_mt6785 mt6785
-          git clone --depth=1 https://gitlab.com/Panchajanya1999/azure-clang.git mt6785/clang
+          git clone --depth=1 https://gitlab.com/LeCmnGend/proton-clang.git -b clang-16 mt6785/clang
 
     - name: Trigger ksu wf
       env:

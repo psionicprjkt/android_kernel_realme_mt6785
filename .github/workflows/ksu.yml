@@ -23,7 +23,7 @@ jobs:
     - name: Clone sources
       run: |
           git clone --depth=1 https://github.com/psionicprjkt/android_kernel_realme_mt6785 mt6785
-          git clone --depth=1 https://gitlab.com/Panchajanya1999/azure-clang.git mt6785/clang
+          git clone --depth=1 https://gitlab.com/LeCmnGend/proton-clang -b clang-16 mt6785/clang
 
     - name: Latest KernelSU
       run: |
