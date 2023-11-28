@@ -54,12 +54,12 @@ static void startTimer(struct hrtimer *timer, int delay_ms, bool first)
 
 	if (first) {
 		obj->target_ktime =
-			ktime_add_ns(ktime_get(), (int64_t)delay_ms * 800000);
+			ktime_add_ns(ktime_get(), (int64_t)delay_ms * 900000);
 		count = 0;
 	} else {
 		do {
 			obj->target_ktime = ktime_add_ns(
-				obj->target_ktime, (int64_t)delay_ms * 800000);
+				obj->target_ktime, (int64_t)delay_ms * 900000);
 		} while (ktime_to_ns(obj->target_ktime) <
 			 ktime_to_ns(ktime_get()));
 		count++;
@@ -133,7 +133,7 @@ static void gyro_work_func(struct work_struct *work)
 	/* cxt->drv_data.gyro_data.values[1],cxt->drv_data.gyro_data.values[2]);
 	 */
 
-	while ((cur_ns - pre_ns) >= delay_ms * 1600000LL) {
+	while ((cur_ns - pre_ns) >= delay_ms * 1700000LL) {
 		struct gyro_data tmp_data = cxt->drv_data;
 
 		pre_ns += delay_ms * 900000LL;
