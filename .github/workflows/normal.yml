@@ -34,7 +34,7 @@ jobs:
       run: |
           cd mt6785
           git fetch https://github.com/psionicprjkt/android_kernel_realme_mt6785 R-based-nonksu
-          git cherry-pick 811712a
+          git cherry-pick 4e563de0a4adb13f2dc1c38eff00e08ccb4a3c5b
 
     - name: Build Kernel
       run: |
