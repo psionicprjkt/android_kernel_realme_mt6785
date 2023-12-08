@@ -30,6 +30,11 @@ jobs:
           cd mt6785
           rm -rf KernelSU && curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
 
+    - name: Trigger ksu-oc wf
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: gh workflow run ksu-oc.yml --ref R-based
+
     - name: Build Kernel
       run: |
           cd mt6785
