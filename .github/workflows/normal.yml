@@ -1,5 +1,4 @@
-# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+# Copyright (C) 2023 psionicprjkt
 
 name: build-normal
 
@@ -7,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  cron:
+  build:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -15,42 +14,48 @@ jobs:
         working-directory: ./
 
     steps:
-    - uses: actions/checkout@v2
-    - run: |
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set Git Config
+        run: |
           git config --global user.name "officialputuid"
           git config --global user.email officialputuid@hack.id
 
-    - name: Clone sources
-      run: |
+      - name: Clone Clang & Kernel Sources
+        run: |
           git clone https://github.com/psionicprjkt/android_kernel_realme_mt6785 mt6785
-          git clone --depth=1 https://gitlab.com/LeCmnGend/proton-clang.git -b clang-16 mt6785/clang
+          cd mt6785
+          wget https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/main/clang-r498229b.tar.gz -O "aosp-clang.tar.gz"
+          mkdir clang && tar -xf aosp-clang.tar.gz -C clang && rm -f aosp-clang.tar.gz
 
-    - name: Trigger ksu wf
-      env:
+      - name: Trigger KSU Workflow
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: gh workflow run ksu.yml --ref R-based
+        run: gh workflow run ksu.yml --ref R-based
 
-    - name: Revert KernelSU
-      run: |
+      - name: Revert KernelSU Changes
+        run: |
           cd mt6785
           git fetch https://github.com/psionicprjkt/android_kernel_realme_mt6785 R-based-nonksu
           git cherry-pick 4e563de0a4adb13f2dc1c38eff00e08ccb4a3c5b
 
-    - name: Build Kernel
-      run: |
+      - name: Build Kernel
+        run: |
           cd mt6785
           . build-normal.sh
 
-    - name: Set Date
-      run: |
+      - name: Set Release Date
+        run: |
           echo "RELEASE_DATE=$(date +"%d%m%Y")" >> "$GITHUB_ENV"
 
-    - name: Release Kernel
-      uses: marvinpinto/action-automatic-releases@latest
-      with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        automatic_release_tag: "Normal"
-        prerelease: false
-        title: psionic-kernel-RM6785-${{ env.RELEASE_DATE }}-Normal
-        files: |
-          mt6785/AnyKernel/psionic-kernel-RM6785*
+      - name: Release Kernel
+        uses: marvinpinto/action-automatic-releases@latest
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          automatic_release_tag: "Normal"
+          prerelease: false
+          title: psionic-kernel-RM6785-${{ env.RELEASE_DATE }}-Normal
+          files: |
+            mt6785/AnyKernel/psionic-kernel-RM6785*
+

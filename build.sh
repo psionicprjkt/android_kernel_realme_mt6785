@@ -1,13 +1,24 @@
 #!/bin/bash
 
+# Copyright (C) 2023 psionicprjkt
+
 function psionic_compile()
 {
-    source ~/.bashrc && source ~/.profile
+    # setup_environment
+    source ~/.bashrc
+    source ~/.profile
+
+    # download_clang
+    wget https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/main/clang-r498229b.tar.gz -O "aosp-clang.tar.gz"
+    mkdir clang && tar -xf aosp-clang.tar.gz -C clang && rm -rf aosp-clang.tar.gz
+
+    # cleanup_directories
+    rm -rf out AnyKernel AK3-* && mkdir -p out
+
+    # compile_kernel
     export ARCH=arm64
-    git clone --depth=1 https://gitlab.com/LeCmnGend/proton-clang -b clang-16 clang
-    [ -d "out" ] && rm -rf AnyKernel && rm -rf out || mkdir -p out
     make O=out ARCH=arm64 RM6785_defconfig
-    PATH="${PWD}/clang/bin:${PATH}:${PWD}/clang/bin:${PATH}:${PWD}/clang/bin:${PATH}" \
+    PATH="${PWD}/clang/bin:${PATH}" \
         make -j$(nproc --all) O=out \
         ARCH=arm64 \
         CC="clang" \
@@ -27,13 +38,18 @@ function psionic_compile()
 
 function psionic_upload()
 {
-    rm -rf AK3* && rm -rf AnyKernel
+    # download_ak3
     wget https://psionicprjkt.my.id/assets/files/AK3-RM6785.zip && unzip AK3-RM6785
+
+    # setup_kernel_release
     cp out/arch/arm64/boot/Image.gz-dtb AnyKernel && cd AnyKernel
     date=$(date "+%d%m%Y")
     zip -r9 psionic-kernel-RM6785-$date-release.zip *
-    curl bashupload.com -T psionic-kernel-RM6785*
+
+    # upload_kernel_release
+    curl -s bashupload.com -T psionic-kernel-RM6785*
 }
 
 psionic_compile
 psionic_upload
+
