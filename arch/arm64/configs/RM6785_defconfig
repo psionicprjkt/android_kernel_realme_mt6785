@@ -1872,7 +1872,8 @@ CONFIG_MTK_SCHED_INTEROP=y
 # MTK Energy Aware Scheduler Plus
 #
 CONFIG_MTK_SCHED_EAS_POWER_SUPPORT=y
-# CONFIG_MTK_SCHED_MULTI_GEARS is not set
+CONFIG_MTK_SCHED_MULTI_GEARS=y
+# CONFIG_MTK_SCHED_BL_FIRST is not set
 
 #
 # MTK Heterogenous MultiProcessor Scheduler
