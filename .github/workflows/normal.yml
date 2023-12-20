@@ -1,0 +1,58 @@
+# Copyright (C) 2023 psionicprjkt
+
+name: build-normal
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set Git Config
+        run: |
+          git config --global user.name "officialputuid" && git config --global user.email officialputuid@hack.id
+
+      - name: Download Resources
+        run: |
+          git clone https://github.com/psionicprjkt/android_kernel_realme_mt6785 mt6785 && cd mt6785
+          git clone --depth=1 https://github.com/psionicprjkt/aarch64-linux-android-4.9 arm64 && git clone --depth=1 https://github.com/psionicprjkt/arm-linux-androideabi-4.9 arm32
+          wget --quiet https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/main/clang-r498229b.tar.gz -O "aosp-clang.tar.gz"
+          mkdir clang && tar -xf aosp-clang.tar.gz -C clang && rm -f aosp-clang.tar.gz
+
+      - name: Trigger KSU Workflow
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run ksu.yml --ref R-based
+
+      - name: Revert KernelSU Changes
+        run: |
+          cd mt6785 && git fetch https://github.com/psionicprjkt/android_kernel_realme_mt6785 R-based-nonksu
+          git cherry-pick ???????
+
+      - name: Build Kernel
+        run: |
+          cd mt6785 && . build-normal.sh
+
+      - name: Set Release Date
+        run: |
+          echo "RELEASE_DATE=$(date +"%d%m%Y")" >> "$GITHUB_ENV"
+
+      - name: Release Kernel
+        uses: marvinpinto/action-automatic-releases@latest
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          automatic_release_tag: "Normal"
+          prerelease: false
+          title: psionic-kernel-RM6785-${{ env.RELEASE_DATE }}-Normal
+          files: |
+            mt6785/AnyKernel/psionic-kernel-RM6785*
+
