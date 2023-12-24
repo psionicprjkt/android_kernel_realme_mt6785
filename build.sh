@@ -8,7 +8,7 @@ function psionic_compile()
     rm -rf out AnyKernel AK3-* clang arm64 arm32 && mkdir -p out
 
     # download_resources
-    wget --quiet https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/main/clang-r498229b.tar.gz -O "aosp-clang.tar.gz"
+    wget --quiet https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/main/clang-r510928.tar.gz -O "aosp-clang.tar.gz"
     mkdir clang && tar -xf aosp-clang.tar.gz -C clang && rm -rf aosp-clang.tar.gz
     git clone --depth=1 https://github.com/psionicprjkt/aarch64-linux-android-4.9 arm64
     git clone --depth=1 https://github.com/psionicprjkt/arm-linux-androideabi-4.9 arm32
