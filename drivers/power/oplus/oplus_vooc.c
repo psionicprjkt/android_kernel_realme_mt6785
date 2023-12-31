@@ -687,7 +687,7 @@ int oplus_vooc_get_smaller_battemp_cooldown(int ret_batt, int ret_cool){
 int oplus_vooc_get_cool_down_valid(void) {
 	int cool_down = oplus_chg_get_cool_down_status();
 	if(!g_vooc_chip) {
-		pr_err("VOOC NULL ,return!!");
+		//pr_err("VOOC NULL ,return!!");
 		return 0;
 	}
 	if (g_vooc_chip->vooc_multistep_adjust_current_support == true) {
@@ -1345,13 +1345,13 @@ void fw_update_thread(struct work_struct *work)
 				break;
 			}
 		} while((ret < 0) && (--retry > 0));
-		chg_debug(" retry times %d, chip->fw_path[%s]\n", 5 - retry, chip->fw_path);
+		//chg_debug(" retry times %d, chip->fw_path[%s]\n", 5 - retry, chip->fw_path);
 		if(!ret) {
 			chip->firmware_data =  fw->data;
 			chip->fw_data_count =  fw->size;
 			chip->fw_data_version = chip->firmware_data[chip->fw_data_count - 4];
-			chg_debug("count:0x%x, version:0x%x\n",
-				chip->fw_data_count,chip->fw_data_version);
+			/*chg_debug("count:0x%x, version:0x%x\n",
+				chip->fw_data_count,chip->fw_data_version);*/
 			if(chip->vops->fw_check_then_recover) {
 				ret = chip->vops->fw_check_then_recover(chip);
 				sprintf(version,"%d", chip->fw_data_version);
@@ -1367,12 +1367,12 @@ void fw_update_thread(struct work_struct *work)
 			release_firmware(fw);
 			chip->firmware_data = NULL;
 		} else {
-			chg_debug("%s: fw_name request failed, %d\n", __func__, ret);
+			//chg_debug("%s: fw_name request failed, %d\n", __func__, ret);
 		}
 	}else {
 		ret = chip->vops->fw_check_then_recover(chip);
 		if (ret == FW_CHECK_MODE) {
-			chg_debug("update finish, then clean fastchg_dummy , fastchg_started, watch_dog\n");
+			//chg_debug("update finish, then clean fastchg_dummy , fastchg_started, watch_dog\n");
 			chip->fastchg_dummy_started = false;
 			chip->fastchg_started = false;
 			chip->allow_reading = true;
@@ -1464,7 +1464,7 @@ static int init_proc_fastchg_fw_update(struct oplus_vooc_chip *chip)
 
 	p = proc_create_data("fastchg_fw_update", 0664, NULL, &fastchg_fw_update_proc_fops,chip);
 	if (!p) {
-		pr_err("proc_create fastchg_fw_update_proc_fops fail!\n");
+		//pr_err("proc_create fastchg_fw_update_proc_fops fail!\n");
 	}
 	return 0;
 }
@@ -1484,7 +1484,7 @@ static int init_vooc_proc(struct oplus_vooc_chip *chip)
 	memcpy(chip->manufacture_info.manufacture, chip->fw_path, MAX_FW_NAME_LENGTH);
 	register_devinfo("fastchg", &chip->manufacture_info);
 	init_proc_fastchg_fw_update(chip);
-	chg_debug(" version:%s, fw_path:%s\n", chip->manufacture_info.version, chip->fw_path);
+	//chg_debug(" version:%s, fw_path:%s\n", chip->manufacture_info.version, chip->fw_path);
 	return 0;
 }
 void oplus_vooc_init(struct oplus_vooc_chip *chip)
