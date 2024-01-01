@@ -496,7 +496,7 @@ static struct mtp_dev *_mtp_dev;
 
 #ifdef OPLUS_FEATURE_CHG_BASIC
 //yan.chen@Swdp.shanghai, 2015/11/26, add mtp callback for hypnus
-static ATOMIC_NOTIFIER_HEAD(mtp_rw_notifier);
+static __maybe_unused ATOMIC_NOTIFIER_HEAD(mtp_rw_notifier);
 #endif
 
 static inline struct mtp_dev *func_to_mtp(struct usb_function *f)
