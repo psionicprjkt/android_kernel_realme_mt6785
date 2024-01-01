@@ -259,7 +259,6 @@ int register_device_proc(char *name, char *version, char *vendor)
 static ssize_t fork_para_monitor_read_proc(struct file *file, char __user *buf,
                 size_t count, loff_t *off)
 {
-        char page[256] = {0};
         int ret = 0;
         //ret = snprintf(page, 255, " times:%d\n father pid:%d\n child pid:%d\n", happend_times, fork_pid_father, fork_pid_child);
 
@@ -558,7 +557,7 @@ static int reinit_aboard_id(struct device *dev, struct manufacture_info *info)
 	int32_t hw_mask = 0;
 	int i = 0, ret = 0;
 	int id_size = 0;
-	int active_val = 0, sleep_val = 0, idle_val = 0;
+	int active_val = 0, sleep_val = 0;
 	uint32_t *main_val, *sub_val;
 	struct device_info *dev_info = g_dev_info;
 
