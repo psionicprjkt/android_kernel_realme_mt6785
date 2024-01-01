@@ -923,7 +923,6 @@ static int mt_i2c_do_transfer(struct mt_i2c *i2c)
 	/* u16 ch_offset; */
 #ifdef OPLUS_FEATURE_CHG_BASIC
 /*Jianchao.Shi@PSW.BSP.CHG.Basic, 2019/07/01, sjc Add for zhongying fg ZY0602*/
-	const char * chg_i2c = "i2c-7";
 	static int err_count_for_reset = 0;
 #endif
 	i2c->trans_stop = false;
