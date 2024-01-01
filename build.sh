@@ -32,7 +32,8 @@ function psionic_compile()
         CLANG_TRIPLE=aarch64-linux-gnu- \
         CROSS_COMPILE="${PWD}/arm64/aarch64-linux-android-" \
         CROSS_COMPILE_COMPAT="${PWD}/arm32/arm-linux-androideabi-" \
-        CONFIG_NO_ERROR_ON_MISMATCH=y 2>&1 | tee error.log
+        CONFIG_NO_ERROR_ON_MISMATCH=y \
+        CFLAGS="-Wno-pragma-messages" 2>&1 | tee error.log
 }
 
 function psionic_upload()
