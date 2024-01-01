@@ -242,7 +242,7 @@ extern void oplus_match_wlan_wakeup(void) {
 	oplus_mdaci_nw_wakeup[OPLUS_NW_WIFI]++;
 }
 
-static void match_qrtr_new_service_port(int id, int port, u64 qrtr[][4]) {
+static void __maybe_unused match_qrtr_new_service_port(int id, int port, u64 qrtr[][4]) {
 	int i;
 	for (i = 0; i < OPLUS_MAX_QRTR_SERVICE_LEN; ++i) {
 		if (qrtr[i][0] == 0) {
@@ -258,7 +258,7 @@ static void match_qrtr_new_service_port(int id, int port, u64 qrtr[][4]) {
 	}
 }
 
-static void match_qrtr_del_service_port(int id, u64 qrtr[][4]) {
+static void __maybe_unused match_qrtr_del_service_port(int id, u64 qrtr[][4]) {
 	int i;
 	for (i = 0; i < OPLUS_MAX_QRTR_SERVICE_LEN; ++i) {
 		if (qrtr[i][0] == 1 && qrtr[i][1] == id) {
