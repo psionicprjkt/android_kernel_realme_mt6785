@@ -36,7 +36,7 @@ jobs:
       - name: Revert KernelSU Changes
         run: |
           cd mt6785 && git fetch https://github.com/psionicprjkt/android_kernel_realme_mt6785 R-based-nonksu
-          git cherry-pick ???????
+          git cherry-pick be5dc6ed6e3c1f188271ef7cd17bd86b089df891
 
       - name: Build Kernel
         run: |
