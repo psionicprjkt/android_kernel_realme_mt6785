@@ -23,7 +23,7 @@ compile_kernel() {
         OBJDUMP=llvm-objdump \
         CLANG_TRIPLE=aarch64-linux-gnu- \
         CROSS_COMPILE="${PWD}/arm64/aarch64-linux-android-" \
-        CROSS_COMPILE_COMPAT="${PWD}/arm32/arm-linux-androideabi-" \
+        CROSS_COMPILE_ARM32="${PWD}/arm32/arm-linux-androideabi-" \
         CONFIG_NO_ERROR_ON_MISMATCH=y \
         CFLAGS="-Wno-pragma-messages"
 }
