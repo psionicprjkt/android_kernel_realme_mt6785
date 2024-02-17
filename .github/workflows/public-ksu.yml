@@ -51,6 +51,7 @@ jobs:
       - name: Set Release Date
         run: |
           echo "RELEASE_DATE=$(date +"%d%m%Y")" >> "$GITHUB_ENV"
+          echo "VERSION_KERNEL=$(cat version)" >> "$GITHUB_ENV"
 
       - name: Release Kernel
         uses: marvinpinto/action-automatic-releases@latest
