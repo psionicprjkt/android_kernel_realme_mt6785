@@ -1,6 +1,6 @@
 # Copyright (C) 2024 psionicprjkt
 
-name: public-build-kernelsu
+name: build-kernelsu
 
 on:
   workflow_dispatch:
@@ -25,10 +25,10 @@ jobs:
       - name: Setup Repository & Resources
         run: |
           git config --global user.name "officialputuid" && git config --global user.email officialputuid@hack.id
-          git clone --recursive --depth=1 https://github.com/psionicprjkt/android_kernel_realme_mt6785 mt6785 && cd mt6785
+          git clone --recursive --depth=1 https://officialputuid:${{ secrets.GH_TOKEN }}@github.com/${{ secrets.GH_REPO_PRIVATE }} -b ${{ secrets.GH_BRANCH_PRIVATE }} mt6785 && cd mt6785
           git clone --depth=1 https://github.com/psionicprjkt/aarch64-linux-android-4.9 arm64 && git clone --depth=1 https://github.com/psionicprjkt/arm-linux-androideabi-4.9 arm32
-          wget --quiet https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/main/clang-r498229b.tar.gz -O "aosp-clang.tar.gz"
-          mkdir clang && tar -xf aosp-clang.tar.gz -C clang && rm -f aosp-clang.tar.gz
+          wget --quiet https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/main/clang-r510928.tar.gz -O "clang.tar.gz"
+          mkdir clang && tar -xf clang.tar.gz -C clang && rm -f clang.tar.gz
 
       - name: Setup Version
         run: |
@@ -46,7 +46,7 @@ jobs:
           echo "Local Version: $(grep CONFIG_LOCALVERSION= $d | cut -d '"' -f2)"
 
       - name: Setup Build Kernel
-        run: cd mt6785 && . build-ksu.sh
+        run: cd mt6785 && bash build-ksu.sh
 
       - name: Set Release Date
         run: |

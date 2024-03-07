@@ -1,6 +1,6 @@
 # Copyright (C) 2024 psionicprjkt
 
-name: private-build-kernelsu
+name: build-default
 
 on:
   workflow_dispatch:
@@ -27,7 +27,7 @@ jobs:
           git config --global user.name "officialputuid" && git config --global user.email officialputuid@hack.id
           git clone --recursive --depth=1 https://officialputuid:${{ secrets.GH_TOKEN }}@github.com/${{ secrets.GH_REPO_PRIVATE }} -b ${{ secrets.GH_BRANCH_PRIVATE }} mt6785 && cd mt6785
           git clone --depth=1 https://github.com/psionicprjkt/aarch64-linux-android-4.9 arm64 && git clone --depth=1 https://github.com/psionicprjkt/arm-linux-androideabi-4.9 arm32
-          wget --quiet https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/main/clang-r498229b.tar.gz -O "clang.tar.gz"
+          wget --quiet https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/main/clang-r510928.tar.gz -O "clang.tar.gz"
           mkdir clang && tar -xf clang.tar.gz -C clang && rm -f clang.tar.gz
 
       - name: Setup Version
@@ -35,7 +35,9 @@ jobs:
           cd mt6785
           v=$(cat version)
           d="arch/arm64/configs/RM6785_defconfig"
-          sed -i "s/\(CONFIG_LOCALVERSION=\"-psionic-kernelsu-\).*\"/\1$v\"/" $d
+          sed -i 's/CONFIG_KSU=y/CONFIG_KSU=n/' $d
+          sed -i 's/\(CONFIG_LOCALVERSION="-psionic-\)kernelsu-\(.*"\)/\1\2/' $d
+          sed -i 's/\(CONFIG_LOCALVERSION="-psionic-\).*"/\1'"$v\"/" $d
 
       - name: Check Version Kernel
         run: |
@@ -46,20 +48,20 @@ jobs:
           echo "Local Version: $(grep CONFIG_LOCALVERSION= $d | cut -d '"' -f2)"
 
       - name: Setup Build Kernel
-        run: cd mt6785 && bash build-ksu.sh
+        run: cd mt6785 && bash build-default.sh
 
-      - name: Set Release Date
+      - name: Setup ENV
         run: |
           echo "RELEASE_DATE=$(date +"%d%m%Y")" >> "$GITHUB_ENV"
           echo "VERSION_KERNEL=$(cat version)" >> "$GITHUB_ENV"
 
-      - name: Release Kernel
+      - name: Setup Release Kernel
         uses: marvinpinto/action-automatic-releases@latest
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          automatic_release_tag: "KernelSU"
+          automatic_release_tag: "Default"
           prerelease: false
-          title: psionic-kernel-RM6785-${{ env.RELEASE_DATE }}-${{ env.VERSION_KERNEL }}-KernelSU
+          title: psionic-kernel-RM6785-${{ env.RELEASE_DATE }}-${{ env.VERSION_KERNEL }}
           files: |
             mt6785/AnyKernel/psionic-kernel-RM6785*
 
