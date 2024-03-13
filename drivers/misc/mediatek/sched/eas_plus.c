@@ -51,17 +51,14 @@ int sched_scheduler_switch(enum SCHED_LB_TYPE new_sched)
 	spin_lock_irqsave(&sched_switch_lock, flags);
 	switch (new_sched) {
 	case SCHED_EAS_LB:
-		pr_info("Switching scheduler to EAS\n");
 		sysctl_sched_features &= ~(1 << __SCHED_FEAT_SCHED_HMP);
 		sysctl_sched_features |= 1 << __SCHED_FEAT_ENERGY_AWARE;
 		break;
 	case SCHED_HMP_LB:
-		pr_info("Switching scheduler to HMP\n");
 		sysctl_sched_features &= ~(1 << __SCHED_FEAT_ENERGY_AWARE);
 		sysctl_sched_features |= 1 << __SCHED_FEAT_SCHED_HMP;
 		break;
 	case SCHED_HYBRID_LB:
-		pr_info("Switching scheduler to Hybrid\n");
 		sysctl_sched_features |= 1 << __SCHED_FEAT_ENERGY_AWARE;
 		sysctl_sched_features |= 1 << __SCHED_FEAT_SCHED_HMP;
 		break;
@@ -154,12 +151,8 @@ static ssize_t store_eas_knob(struct kobject *kobj,
 	 * 1: EAS
 	 * 2: Hybrid
 	 */
-	if (sscanf(buf, "%iu", &val) != 0) {
-		pr_info("Setting scheduler switch value: %d\n", val);
+	if (sscanf(buf, "%iu", &val) != 0)
 		sched_scheduler_switch(val);
-	} else {
-		pr_err("Failed to parse scheduler switch value\n");
-	}
 
 	return count;
 }
